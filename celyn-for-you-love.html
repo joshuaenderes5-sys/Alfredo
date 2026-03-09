@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Celyn 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;700;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pink:#ff6b9d; --pink2:#ff4d8d; --pinkl:#ffb3d1; --pinkp:#fff0f7;
+  --deep:#d63384; --bg:#fff5fb;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--bg);font-family:'Nunito',sans-serif;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:16px 16px 40px;overflow-x:hidden;
+}
+.hf{position:fixed;opacity:.12;animation:floatUp linear infinite;pointer-events:none;z-index:0;}
+@keyframes floatUp{0%{transform:translateY(110vh) rotate(0deg);}100%{transform:translateY(-10vh) rotate(360deg);}}
+
+/* HEADER */
+.header{display:flex;flex-direction:column;align-items:center;margin-bottom:12px;z-index:1;position:relative;}
+.from-lbl{font-size:.72rem;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:var(--pinkl);margin-bottom:1px;}
+.title{font-family:'Pacifico',cursive;font-size:clamp(2.2rem,8vw,3.2rem);color:var(--pink);line-height:1;
+  text-shadow:3px 3px 0 #ffb3d1,5px 5px 0 rgba(255,107,157,.15);animation:tpulse 2s ease-in-out infinite;}
+@keyframes tpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.subtitle{font-family:'Baloo 2',cursive;font-size:clamp(.9rem,3vw,1.2rem);color:#ff9ec5;font-weight:700;letter-spacing:1.5px;margin-top:2px;}
+.divider{display:flex;gap:8px;margin-top:7px;font-size:1.1rem;animation:hbeat 1.2s ease-in-out infinite;}
+@keyframes hbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+
+/* CHAR SELECTOR */
+.char-sel{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;justify-content:center;z-index:1;position:relative;}
+.cbtn{background:white;border:2.5px solid var(--pinkl);border-radius:50px;padding:6px 14px;
+  font-family:'Nunito',sans-serif;font-weight:800;font-size:.82rem;cursor:pointer;transition:all .2s;color:#bbb;}
+.cbtn:hover,.cbtn.active{background:var(--pink);border-color:var(--pink);color:white;transform:scale(1.07);box-shadow:0 4px 14px rgba(255,107,157,.4);}
+
+/* CARD */
+.card{background:white;border-radius:28px;padding:20px 18px 16px;width:100%;max-width:400px;
+  box-shadow:0 8px 40px rgba(255,107,157,.18),0 2px 8px rgba(0,0,0,.05);position:relative;z-index:1;border:3px solid var(--pinkl);}
+.snd-btn{position:absolute;top:13px;right:13px;background:var(--pinkp);border:2px solid var(--pinkl);
+  border-radius:50%;width:33px;height:33px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:all .2s;}
+.snd-btn:hover{background:var(--pink);}
+
+/* STAGE */
+.stage{width:100%;height:165px;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#fff5fb 65%,#ffe8f4 100%);
+  border-radius:16px;margin-bottom:12px;border:2px solid var(--pinkl);}
+.stage::after{content:'';position:absolute;bottom:30px;left:0;right:0;
+  height:2px;background:rgba(255,107,157,.18);border-radius:2px;}
+
+/* BEAR wrapper — walks horizontally */
+#bearWrap{
+  position:absolute;
+  bottom:28px;
+  left:50%;
+  transform:translateX(-50%);
+  width:70px;
+  cursor:pointer;
+  transition:none;
+}
+
+/* animations on the SVG inside */
+#bearWrap.idle svg{animation:sway 2s ease-in-out infinite;}
+@keyframes sway{
+  0%,100%{transform:rotate(-2deg) translateY(0);}
+  50%    {transform:rotate(2deg) translateY(-5px);}
+}
+#bearWrap.walk svg{animation:walkB .32s ease-in-out infinite alternate;}
+@keyframes walkB{
+  0%  {transform:rotate(-5deg) translateY(0) scaleX(var(--sx,1));}
+  100%{transform:rotate(5deg) translateY(-8px) scaleX(var(--sx,1));}
+}
+#bearWrap.think svg{animation:thinkA .6s ease-in-out infinite alternate;}
+@keyframes thinkA{
+  0%  {transform:rotate(-4deg) scale(1) translateY(0);}
+  100%{transform:rotate(4deg) scale(1.06) translateY(-4px);}
+}
+#bearWrap.talk svg{animation:talkA .2s ease-in-out infinite alternate;}
+@keyframes talkA{
+  0%  {transform:rotate(-6deg) scale(1) translateY(0);}
+  100%{transform:rotate(6deg) scale(1.08) translateY(-7px);}
+}
+
+/* SPEECH BUBBLE */
+.sbub{
+  position:absolute;bottom:128px;left:50%;transform:translateX(-50%);
+  background:var(--pinkp);border:2.5px solid var(--pinkl);border-radius:14px;
+  padding:7px 12px;font-size:.8rem;font-weight:800;color:var(--deep);
+  text-align:center;max-width:230px;min-width:80px;
+  opacity:0;pointer-events:none;transition:opacity .2s;z-index:5;
+}
+.sbub::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border-left:7px solid transparent;border-right:7px solid transparent;border-top:9px solid var(--pinkl);}
+.sbub::before{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid var(--pinkp);z-index:1;}
+.sbub.show{opacity:1;animation:bpop .32s cubic-bezier(.34,1.56,.64,1);}
+@keyframes bpop{from{transform:translateX(-50%) scale(.5)}to{transform:translateX(-50%) scale(1)}}
+
+.tdots{display:none;gap:4px;align-items:center;justify-content:center;}
+.tdots span{width:7px;height:7px;background:var(--pink);border-radius:50%;animation:db .7s ease-in-out infinite;}
+.tdots span:nth-child(2){animation-delay:.15s}
+.tdots span:nth-child(3){animation-delay:.3s}
+@keyframes db{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-5px);opacity:1}}
+.tdots.show{display:flex;}
+
+.spkbars{display:none;gap:3px;align-items:flex-end;height:18px;margin-top:3px;}
+.spkbars span{width:4px;background:var(--pink);border-radius:4px;animation:sb .42s ease-in-out infinite alternate;}
+.spkbars span:nth-child(1){height:6px;animation-delay:0s}
+.spkbars span:nth-child(2){height:14px;animation-delay:.1s}
+.spkbars span:nth-child(3){height:10px;animation-delay:.2s}
+.spkbars span:nth-child(4){height:16px;animation-delay:.05s}
+.spkbars span:nth-child(5){height:8px;animation-delay:.15s}
+@keyframes sb{from{transform:scaleY(.4);opacity:.6}to{transform:scaleY(1.3);opacity:1}}
+.spkbars.show{display:flex;}
+
+/* CHAT LOG */
+.chat-log{max-height:140px;overflow-y:auto;margin-bottom:10px;padding:8px;
+  background:#fff8fc;border-radius:14px;border:2px solid #ffe0ef;
+  display:flex;flex-direction:column;gap:6px;scroll-behavior:smooth;}
+.chat-log::-webkit-scrollbar{width:3px}
+.chat-log::-webkit-scrollbar-thumb{background:var(--pinkl);border-radius:4px}
+.cmsg{display:flex;flex-direction:column;animation:ms .28s ease;}
+@keyframes ms{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.cmsg.user{align-items:flex-end;}
+.cmsg.bot{align-items:flex-start;}
+.cname{font-size:.66rem;color:#bbb;margin-bottom:2px;font-weight:800;}
+.cbub{max-width:82%;padding:7px 12px;border-radius:16px;font-size:.85rem;font-weight:700;line-height:1.4;}
+.cmsg.user .cbub{background:var(--pink);color:white;border-bottom-right-radius:3px;}
+.cmsg.bot  .cbub{background:var(--pinkp);color:var(--deep);border:2px solid var(--pinkl);border-bottom-left-radius:3px;}
+
+/* INPUT */
+.inp-row{display:flex;gap:8px;}
+input[type=text]{flex:1;border:2.5px solid var(--pinkl);border-radius:50px;padding:10px 14px;
+  font-family:'Nunito',sans-serif;font-size:.91rem;font-weight:700;color:#444;
+  outline:none;transition:border-color .2s;background:var(--pinkp);}
+input[type=text]:focus{border-color:var(--pink);background:white;}
+input[type=text]::placeholder{color:#dda0b8;}
+.sbtn{background:var(--pink);border:none;border-radius:50px;padding:10px 16px;
+  font-size:1.1rem;cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 14px rgba(255,107,157,.4);color:white;}
+.sbtn:hover{background:var(--pink2);transform:scale(1.08);}
+.sbtn:active{transform:scale(.93);}
+.sbtn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.load-lbl{font-size:.73rem;color:var(--pink);text-align:center;margin-top:4px;
+  font-weight:800;opacity:0;transition:opacity .3s;min-height:15px;}
+.load-lbl.show{opacity:1;}
+
+/* HEART BURST */
+.hburst{position:fixed;font-size:1.1rem;pointer-events:none;animation:hb .8s ease-out forwards;z-index:999;}
+@keyframes hb{0%{transform:translate(0,0) scale(0);opacity:1;}100%{transform:translate(var(--dx),var(--dy)) scale(1.5);opacity:0;}}
+
+/* FOOTER */
+.footer{margin-top:13px;text-align:center;color:#ffb3d1;font-size:.74rem;font-weight:800;z-index:1;position:relative;}
+</style>
+</head>
+<body>
+
+<script>
+// floating bg hearts
+(function(){
+  var e=['💕','🌸','✨','💖','🌷','💗','⭐','🦋','🎀'];
+  for(var i=0;i<13;i++){
+    var h=document.createElement('div'); h.className='hf';
+    h.textContent=e[Math.floor(Math.random()*e.length)];
+    h.style.cssText='left:'+Math.random()*100+'vw;animation-duration:'+(7+Math.random()*10)+'s;animation-delay:'+(Math.random()*8)+'s;font-size:'+(0.9+Math.random()*1.1)+'rem';
+    document.body.appendChild(h);
+  }
+})();
+</script>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="from-lbl">✦ from ✦</div>
+  <div class="title">Celyn</div>
+  <div class="subtitle">💌 For You, Love 💌</div>
+  <div class="divider">💗 💗 💗</div>
+</div>
+
+<!-- CHAR SELECTOR -->
+<div class="char-sel">
+  <button class="cbtn active" onclick="selChar('bear',this)">🐻 Bear</button>
+  <button class="cbtn" onclick="selChar('cat',this)">🐱 Cat</button>
+  <button class="cbtn" onclick="selChar('bunny',this)">🐰 Bunny</button>
+  <button class="cbtn" onclick="selChar('dino',this)">🦕 Dino</button>
+</div>
+
+<div class="card">
+  <button class="snd-btn" id="sndBtn" onclick="toggleSnd()">🔊</button>
+
+  <div class="stage">
+    <!-- SPEECH BUBBLE -->
+    <div class="sbub" id="sbub">
+      <div id="btext">Hiii love! 💕</div>
+      <div class="tdots" id="tdots"><span></span><span></span><span></span></div>
+      <div class="spkbars" id="spkbars"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- BEAR / CHARACTER -->
+    <div id="bearWrap" class="idle" onclick="charTap()">
+      <svg id="charSvg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="70" height="70">
+        <circle cx="22" cy="22" r="10" fill="#f4a261"/>
+        <circle cx="58" cy="22" r="10" fill="#f4a261"/>
+        <circle cx="22" cy="22" r="6" fill="#ffcba4"/>
+        <circle cx="58" cy="22" r="6" fill="#ffcba4"/>
+        <circle cx="40" cy="42" r="26" fill="#f4a261"/>
+        <ellipse cx="40" cy="50" rx="11" ry="8" fill="#ffcba4"/>
+        <circle cx="31" cy="37" r="4" fill="#3d2b1f"/>
+        <circle cx="49" cy="37" r="4" fill="#3d2b1f"/>
+        <circle cx="32" cy="36" r="1.5" fill="white"/>
+        <circle cx="50" cy="36" r="1.5" fill="white"/>
+        <ellipse cx="40" cy="46" rx="3.5" ry="2.5" fill="#c1440e"/>
+        <path d="M35 51 Q40 56 45 51" stroke="#c1440e" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="25" cy="45" rx="5" ry="3" fill="#ff9eb5" opacity="0.55"/>
+        <ellipse cx="55" cy="45" rx="5" ry="3" fill="#ff9eb5" opacity="0.55"/>
+        <ellipse cx="32" cy="67" rx="7" ry="5" fill="#f4a261"/>
+        <ellipse cx="48" cy="67" rx="7" ry="5" fill="#f4a261"/>
+        <ellipse cx="16" cy="52" rx="6" ry="4" fill="#f4a261" transform="rotate(-20 16 52)"/>
+        <ellipse cx="64" cy="52" rx="6" ry="4" fill="#f4a261" transform="rotate(20 64 52)"/>
+        <text x="28" y="78" font-size="12" text-anchor="middle">💕</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- CHAT LOG -->
+  <div class="chat-log" id="chatLog">
+    <div class="cmsg bot">
+      <div class="cname">🐻 Celyn</div>
+      <div class="cbub">Hiii love! Kumusta ka? Nami-miss na kita! 💗</div>
+    </div>
+  </div>
+
+  <div class="load-lbl" id="loadLbl">Nag-iisip si Celyn... 💭</div>
+
+  <div class="inp-row">
+    <input type="text" id="msgIn" placeholder="Mag-type ng mensahe..." maxlength="200"
+      onkeydown="if(event.key==='Enter')sendMsg()"/>
+    <button class="sbtn" id="sendBtn" onclick="sendMsg()">💌</button>
+  </div>
+</div>
+
+<div class="footer">💖 Made with love by: juswa manyakol 💖</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+var busy       = false;
+var soundOn    = true;
+var curChar    = 'bear';
+var bearX      = 50;   // % left position
+var walkDir    = 1;    // 1 = right, -1 = left
+var walkInt    = null;
+var idleTimer  = null;
+var chatHist   = [];
+
+var CHAR_EMOJI = { bear:'🐻', cat:'🐱', bunny:'🐰', dino:'🦕' };
+
+// ═══════════════════════════════════════════
+//  SVG TEMPLATES
+// ═══════════════════════════════════════════
+var SVG = {
+  bear: '<circle cx="22" cy="22" r="10" fill="#f4a261"/><circle cx="58" cy="22" r="10" fill="#f4a261"/><circle cx="22" cy="22" r="6" fill="#ffcba4"/><circle cx="58" cy="22" r="6" fill="#ffcba4"/><circle cx="40" cy="42" r="26" fill="#f4a261"/><ellipse cx="40" cy="50" rx="11" ry="8" fill="#ffcba4"/><circle cx="31" cy="37" r="4" fill="#3d2b1f"/><circle cx="49" cy="37" r="4" fill="#3d2b1f"/><circle cx="32" cy="36" r="1.5" fill="white"/><circle cx="50" cy="36" r="1.5" fill="white"/><ellipse cx="40" cy="46" rx="3.5" ry="2.5" fill="#c1440e"/><path d="M35 51 Q40 56 45 51" stroke="#c1440e" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="25" cy="45" rx="5" ry="3" fill="#ff9eb5" opacity="0.55"/><ellipse cx="55" cy="45" rx="5" ry="3" fill="#ff9eb5" opacity="0.55"/><ellipse cx="32" cy="67" rx="7" ry="5" fill="#f4a261"/><ellipse cx="48" cy="67" rx="7" ry="5" fill="#f4a261"/><ellipse cx="16" cy="52" rx="6" ry="4" fill="#f4a261" transform="rotate(-20 16 52)"/><ellipse cx="64" cy="52" rx="6" ry="4" fill="#f4a261" transform="rotate(20 64 52)"/><text x="28" y="78" font-size="12" text-anchor="middle">💕</text>',
+
+  cat:  '<polygon points="18,32 10,10 32,24" fill="#ffb3c6"/><polygon points="62,32 70,10 48,24" fill="#ffb3c6"/><polygon points="19,30 13,14 30,22" fill="#ffd6e7"/><polygon points="61,30 67,14 50,22" fill="#ffd6e7"/><circle cx="40" cy="44" r="26" fill="#ffb3c6"/><ellipse cx="40" cy="52" rx="10" ry="7" fill="#ffd6e7"/><ellipse cx="31" cy="38" rx="5" ry="6" fill="#3d2b1f"/><ellipse cx="49" cy="38" rx="5" ry="6" fill="#3d2b1f"/><circle cx="32" cy="37" r="2" fill="white"/><circle cx="50" cy="37" r="2" fill="white"/><polygon points="40,47 37,51 43,51" fill="#ff6b9d"/><path d="M37 51 Q40 55 43 51" stroke="#ff6b9d" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="18" y1="50" x2="34" y2="52" stroke="#ddd" stroke-width="1.2"/><line x1="18" y1="53" x2="34" y2="54" stroke="#ddd" stroke-width="1.2"/><line x1="46" y1="52" x2="62" y2="50" stroke="#ddd" stroke-width="1.2"/><line x1="46" y1="54" x2="62" y2="53" stroke="#ddd" stroke-width="1.2"/><ellipse cx="26" cy="48" rx="5" ry="3" fill="#ff6b9d" opacity="0.4"/><ellipse cx="54" cy="48" rx="5" ry="3" fill="#ff6b9d" opacity="0.4"/><ellipse cx="32" cy="67" rx="7" ry="5" fill="#ffb3c6"/><ellipse cx="48" cy="67" rx="7" ry="5" fill="#ffb3c6"/><text x="28" y="78" font-size="12" text-anchor="middle">🌸</text>',
+
+  bunny:'<ellipse cx="28" cy="18" rx="9" ry="20" fill="white" stroke="#ffb3d1" stroke-width="1.5"/><ellipse cx="52" cy="18" rx="9" ry="20" fill="white" stroke="#ffb3d1" stroke-width="1.5"/><ellipse cx="28" cy="18" rx="5" ry="15" fill="#ffb3d1"/><ellipse cx="52" cy="18" rx="5" ry="15" fill="#ffb3d1"/><circle cx="40" cy="46" r="26" fill="white" stroke="#ffb3d1" stroke-width="1.5"/><ellipse cx="40" cy="54" rx="10" ry="7" fill="#fce4ec"/><circle cx="31" cy="40" r="5" fill="#3d2b1f"/><circle cx="49" cy="40" r="5" fill="#3d2b1f"/><circle cx="32" cy="39" r="2" fill="white"/><circle cx="50" cy="39" r="2" fill="white"/><ellipse cx="40" cy="50" rx="3" ry="2.2" fill="#ff6b9d"/><path d="M35 53 Q40 58 45 53" stroke="#ff6b9d" stroke-width="2" fill="none" stroke-linecap="round"/><ellipse cx="26" cy="47" rx="5" ry="3" fill="#ff9eb5" opacity="0.5"/><ellipse cx="54" cy="47" rx="5" ry="3" fill="#ff9eb5" opacity="0.5"/><ellipse cx="32" cy="67" rx="7" ry="5" fill="white" stroke="#ffb3d1" stroke-width="1.2"/><ellipse cx="48" cy="67" rx="7" ry="5" fill="white" stroke="#ffb3d1" stroke-width="1.2"/><text x="28" y="79" font-size="12" text-anchor="middle">✨</text>',
+
+  dino: '<polygon points="28,12 31,22 25,22" fill="#52b788"/><polygon points="40,8 43,19 37,19" fill="#52b788"/><polygon points="52,12 55,22 49,22" fill="#52b788"/><ellipse cx="40" cy="44" rx="26" ry="24" fill="#74c69d"/><ellipse cx="40" cy="53" rx="13" ry="9" fill="#95d5b2"/><circle cx="31" cy="37" r="6" fill="white"/><circle cx="49" cy="37" r="6" fill="white"/><circle cx="32" cy="38" r="3.5" fill="#2d6a4f"/><circle cx="50" cy="38" r="3.5" fill="#2d6a4f"/><circle cx="33" cy="37" r="1.3" fill="white"/><circle cx="51" cy="37" r="1.3" fill="white"/><ellipse cx="36" cy="49" rx="2.5" ry="1.8" fill="#52b788"/><ellipse cx="44" cy="49" rx="2.5" ry="1.8" fill="#52b788"/><path d="M32 56 Q40 63 48 56" stroke="#2d6a4f" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="36" y="55" width="4" height="5" rx="1.5" fill="white"/><rect x="42" y="55" width="4" height="5" rx="1.5" fill="white"/><ellipse cx="26" cy="46" rx="5" ry="3" fill="#ff9eb5" opacity="0.4"/><ellipse cx="54" cy="46" rx="5" ry="3" fill="#ff9eb5" opacity="0.4"/><ellipse cx="32" cy="67" rx="7" ry="5" fill="#74c69d"/><ellipse cx="48" cy="67" rx="7" ry="5" fill="#74c69d"/><text x="28" y="78" font-size="12" text-anchor="middle">💚</text>'
+};
+
+// ═══════════════════════════════════════════
+//  BEAR / CHARACTER STATE
+// ═══════════════════════════════════════════
+function setState(s) {
+  var w = document.getElementById('bearWrap');
+  if (!w) return;
+  w.className = s;
+
+  var td = document.getElementById('tdots');
+  var sb = document.getElementById('spkbars');
+  var bub = document.getElementById('sbub');
+
+  if (s === 'think') {
+    td.className = 'tdots show';
+    sb.className = 'spkbars';
+    bub.className = 'sbub show';
+    document.getElementById('btext').textContent = '';
+  } else if (s === 'talk') {
+    td.className = 'tdots';
+    sb.className = 'spkbars show';
+    // bubble stays visible (set by showBub)
+  } else {
+    // idle / walk
+    td.className = 'tdots';
+    sb.className = 'spkbars';
+  }
+}
+
+function showBub(txt) {
+  var bub = document.getElementById('sbub');
+  document.getElementById('btext').textContent = txt;
+  document.getElementById('tdots').className = 'tdots';
+  bub.className = 'sbub';
+  void bub.offsetWidth;
+  bub.className = 'sbub show';
+}
+
+function hideBub() {
+  document.getElementById('sbub').className = 'sbub';
+}
+
+// ═══════════════════════════════════════════
+//  WALKING LOGIC
+// ═══════════════════════════════════════════
+function startWalk() {
+  stopWalk();
+  setState('walk');
+  walkDir = Math.random() > 0.5 ? 1 : -1;
+  walkInt = setInterval(function() {
+    if (busy) { stopWalk(); return; }
+    bearX += walkDir * 1.4;
+    if (bearX > 74) walkDir = -1;
+    if (bearX < 26) walkDir = 1;
+    var w = document.getElementById('bearWrap');
+    if (w) {
+      w.style.left = bearX + '%';
+      // flip scaleX via inline style on svg
+      var svg = w.querySelector('svg');
+      if (svg) svg.style.transform = walkDir > 0 ? '' : 'scaleX(-1)';
+    }
+  }, 38);
+}
+
+function stopWalk() {
+  if (walkInt) { clearInterval(walkInt); walkInt = null; }
+  var w = document.getElementById('bearWrap');
+  if (w) {
+    w.style.left = '50%';
+    var svg = w.querySelector('svg');
+    if (svg) svg.style.transform = '';
+  }
+  bearX = 50;
+}
+
+function scheduleIdle() {
+  if (idleTimer) clearTimeout(idleTimer);
+  idleTimer = setTimeout(function() {
+    if (busy) return;
+    startWalk();
+    idleTimer = setTimeout(function() {
+      if (busy) return;
+      stopWalk();
+      setState('idle');
+      scheduleIdle();
+    }, 2000 + Math.random() * 2200);
+  }, 1800 + Math.random() * 2500);
+}
+
+// ═══════════════════════════════════════════
+//  TAP CHARACTER
+// ═══════════════════════════════════════════
+function charTap() {
+  if (busy) return;
+  var msgs = [
+    'Hiii love! Nami-miss na kita! 💕',
+    'Mahal na mahal kita! 🥰',
+    'Ang cute cute mo talaga! 💖',
+    'Lagi kang nasa isip ko! 🌸',
+    'Ikaw lang, promise! 💗'
+  ];
+  var m = msgs[Math.floor(Math.random() * msgs.length)];
+  stopWalk();
+  if (idleTimer) clearTimeout(idleTimer);
+  setState('talk');
+  showBub(m);
+  burstHearts();
+  speakText(m, function() {
+    if (!busy) { setState('idle'); hideBub(); scheduleIdle(); }
+  });
+}
+
+// ═══════════════════════════════════════════
+//  SELECT CHARACTER
+// ═══════════════════════════════════════════
+function selChar(name, btn) {
+  curChar = name;
+  document.querySelectorAll('.cbtn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  var svg = document.getElementById('charSvg');
+  if (svg && SVG[name]) svg.innerHTML = SVG[name];
+  stopWalk();
+  if (idleTimer) clearTimeout(idleTimer);
+  charTap();
+}
+
+// ═══════════════════════════════════════════
+//  SOUND / TTS
+// ═══════════════════════════════════════════
+function toggleSnd() {
+  soundOn = !soundOn;
+  document.getElementById('sndBtn').textContent = soundOn ? '🔊' : '🔇';
+  if (!soundOn && window.speechSynthesis) speechSynthesis.cancel();
+}
+
+function speakText(text, onDone) {
+  // always call onDone even if sound is off
+  if (!soundOn || !window.speechSynthesis) {
+    if (onDone) setTimeout(onDone, 100);
+    return;
+  }
+
+  speechSynthesis.cancel();
+
+  // clean emojis safely
+  var clean = '';
+  for (var i = 0; i < text.length; i++) {
+    var code = text.charCodeAt(i);
+    if (code < 0xD800 || code > 0xDFFF) {
+      if (code < 0x2600 || code > 0x27BF) clean += text[i];
+    }
+  }
+  clean = clean.replace(/\s+/g, ' ').trim();
+  if (!clean) { if (onDone) setTimeout(onDone, 100); return; }
+
+  var utter = new SpeechSynthesisUtterance(clean);
+  utter.pitch = 1.45;
+  utter.rate = 0.9;
+  utter.volume = 0.95;
+  utter.lang = 'en-US';
+
+  utter.onend = function() {
+    document.getElementById('spkbars').className = 'spkbars';
+    if (onDone) onDone();
+  };
+  utter.onerror = function() {
+    document.getElementById('spkbars').className = 'spkbars';
+    if (onDone) onDone();
+  };
+
+  function go() {
+    var vlist = speechSynthesis.getVoices();
+    var pick = vlist.find(function(v) {
+      var n = v.name.toLowerCase();
+      return n.includes('samantha') || n.includes('karen') || n.includes('victoria') ||
+             n.includes('zira') || n.includes('google uk english female') || n.includes('female');
+    }) || vlist.find(function(v){ return v.lang.startsWith('en'); }) || vlist[0];
+    if (pick) utter.voice = pick;
+    document.getElementById('spkbars').className = 'spkbars show';
+    speechSynthesis.speak(utter);
+  }
+
+  var vl = speechSynthesis.getVoices();
+  if (!vl || vl.length === 0) {
+    speechSynthesis.onvoiceschanged = function() {
+      speechSynthesis.onvoiceschanged = null;
+      go();
+    };
+  } else {
+    go();
+  }
+}
+
+// ═══════════════════════════════════════════
+//  CHAT HELPERS
+// ═══════════════════════════════════════════
+function addMsg(role, text) {
+  var log = document.getElementById('chatLog');
+  var wrap = document.createElement('div'); wrap.className = 'cmsg ' + role;
+  var nm = document.createElement('div'); nm.className = 'cname';
+  nm.textContent = role === 'user' ? '😊 Ikaw' : (CHAR_EMOJI[curChar]||'🐻') + ' Celyn';
+  var bub = document.createElement('div'); bub.className = 'cbub';
+  bub.textContent = text;
+  wrap.appendChild(nm); wrap.appendChild(bub);
+  log.appendChild(wrap);
+  log.scrollTop = log.scrollHeight;
+}
+
+// ═══════════════════════════════════════════
+//  HEARTS
+// ═══════════════════════════════════════════
+function burstHearts() {
+  var w = document.getElementById('bearWrap');
+  var r = w.getBoundingClientRect();
+  var cx = r.left + r.width/2, cy = r.top + r.height/2;
+  var em = ['💕','💖','🌸','✨','💗','⭐','🎀','🌷'];
+  for (var i = 0; i < 7; i++) {
+    (function(i) {
+      var h = document.createElement('div'); h.className = 'hburst';
+      h.textContent = em[i % em.length];
+      var a = (Math.PI*2*i)/7, d = 55 + Math.random()*45;
+      h.style.cssText = 'left:'+cx+'px;top:'+cy+'px;--dx:'+(Math.cos(a)*d)+'px;--dy:'+(Math.sin(a)*d)+'px';
+      document.body.appendChild(h);
+      setTimeout(function(){ h.remove(); }, 900);
+    })(i);
+  }
+}
+
+// ═══════════════════════════════════════════
+//  SEND MESSAGE (main AI call)
+// ═══════════════════════════════════════════
+async function sendMsg() {
+  var input = document.getElementById('msgIn');
+  var val = input.value.trim();
+  if (!val || busy) return;
+
+  busy = true;
+  input.value = '';
+  document.getElementById('sendBtn').disabled = true;
+
+  // stop everything
+  stopWalk();
+  if (idleTimer) clearTimeout(idleTimer);
+  if (window.speechSynthesis) speechSynthesis.cancel();
+
+  addMsg('user', val);
+  chatHist.push({ role: 'user', content: val });
+
+  // → THINK
+  setState('think');
+  document.getElementById('loadLbl').className = 'load-lbl show';
+
+  var reply = '';
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: 'You are Celyn, a super cute sweet cartoon character who loves the person talking to you. Reply in Taglish (natural Filipino texting: Tagalog + English mix). Be malambing, kilig-inducing, sweet. Keep replies SHORT: 1-3 sentences only. End with cute emojis. Sound like a loving sweet Filipina girlfriend texting. Never be formal. Be playful, sweet, or teasing — vary it.',
+        messages: chatHist.slice(-12)
+      })
+    });
+
+    if (!res.ok) {
+      var ej = await res.json().catch(function(){ return {}; });
+      throw new Error((ej.error && ej.error.message) || 'HTTP ' + res.status);
+    }
+
+    var data = await res.json();
+    reply = (data.content || []).map(function(c){ return c.text || ''; }).join('').trim();
+    if (!reply) reply = 'Mahal na mahal kita love! 💕';
+
+  } catch(err) {
+    console.error('Celyn API error:', err);
+    reply = 'Ay may error love! Subukan mo ulit? Mahal kita! 💕';
+  }
+
+  // → TALK
+  document.getElementById('loadLbl').className = 'load-lbl';
+  chatHist.push({ role: 'assistant', content: reply });
+  addMsg('bot', reply);
+  setState('talk');
+  showBub(reply);
+  burstHearts();
+
+  // speak → then go back to idle
+  speakText(reply, function() {
+    busy = false;
+    setState('idle');
+    hideBub();
+    scheduleIdle();
+    document.getElementById('sendBtn').disabled = false;
+    document.getElementById('msgIn').focus();
+  });
+
+  // also re-enable button immediately (don't wait for TTS)
+  document.getElementById('sendBtn').disabled = false;
+  busy = false;
+  document.getElementById('msgIn').focus();
+}
+
+// ═══════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════
+if (window.speechSynthesis) speechSynthesis.getVoices();
+document.getElementById('msgIn').focus();
+
+setTimeout(function() {
+  setState('talk');
+  showBub('Hiii love! For you, mahal ko! 💕');
+  speakText('Hi love! For you with all my heart. Nami miss na kita!', function() {
+    setState('idle');
+    hideBub();
+    scheduleIdle();
+  });
+}, 900);
+</script>
+</body>
+</html>
